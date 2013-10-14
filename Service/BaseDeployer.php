@@ -19,6 +19,7 @@ use JordiLlonch\Bundle\DeployBundle\Helpers\PhpFpmHelper;
 use JordiLlonch\Bundle\DeployBundle\Helpers\SharedDirsHelper;
 use JordiLlonch\Bundle\DeployBundle\Helpers\Symfony2;
 use JordiLlonch\Bundle\DeployBundle\Helpers\Symfony2Helper;
+use JordiLlonch\Bundle\DeployBundle\Helpers\FilesHelper;
 use JordiLlonch\Bundle\DeployBundle\SSH\SshManager;
 use JordiLlonch\Bundle\DeployBundle\VCS\VcsFactory;
 use JordiLlonch\Bundle\DeployBundle\VCS\VcsInterface;
