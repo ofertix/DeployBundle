@@ -626,7 +626,6 @@ Easy way to manage shared directories.
 
 * Set shared directory for a given path in the project that will be removed and replaced by a symlink to given path to shared directory.
 
-
 #### PhpFpm
 
 Provides methods to restart php-fpm gracefully.
@@ -699,6 +698,19 @@ helper:
         token: your_token
         room_id: your_room_id
 ```
+#### Files
+Provides several methods to work with files.
+* Replace strings that matches the given regular expression in the given array of files:
+ `$this->getHelper('files')->filesReplacePattern(
+              array($this->getLocalNewRepositoryDir() . '/app/config/parameters.yml'),
+              '/database_user: developer_user/',
+              'database_user: production_user'
+  )`
+* Copy files:
+`$this->getHelper('files')->copyFile(
+    $this->getLocalNewRepositoryDir() . '/app/config/parameters.yml.dist',
+    $this->getLocalNewRepositoryDir() . '/app/config/parameters.yml'
+ );`
 
 
 ## TODO
