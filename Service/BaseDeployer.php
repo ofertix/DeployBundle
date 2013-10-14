@@ -826,7 +826,7 @@ abstract class BaseDeployer implements DeployerInterface
     public function getRollbackList()
     {
         $this->logger->debug(__METHOD__);
-        
+
         $arrListDir = $this->getVersionDirList();
         $r = array();
         foreach($arrListDir as $item) {
@@ -844,7 +844,7 @@ abstract class BaseDeployer implements DeployerInterface
 
         return $r;
     }
-        
+
     public function getStatus()
     {
         $r = array(
