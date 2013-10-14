@@ -668,7 +668,7 @@ abstract class BaseDeployer implements DeployerInterface
 
         if(!$process->isSuccessful())
         {
-            throw new \Exception('ERROR executing: ' . $command . "\n" .$output);
+            throw new \Exception('ERROR executing: ' . $command . "\n" .$process_output);
         }
 
         if(!empty($process_output))
