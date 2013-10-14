@@ -445,8 +445,22 @@ abstract class BaseDeployer implements DeployerInterface
     public function rsync($originPath, $server, $serverPath, $rsyncParams = '')
     {
         list($host, $port) = $this->extractHostPort($server);
-        if ($host == 'localhost') $this->exec('cp -a "' . $originPath . '" "' . $serverPath . '"');
-        else $this->exec('rsync -ar --delete -e "ssh -p ' . $port . ' -i \"' . $this->sshConfig['private_key_file'] . '\" -l ' . $this->sshConfig['user'] . ' -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\"" ' . $rsyncParams . ' "' . $originPath . '" "' . $host . ':' . $serverPath . '"');
+        if ($host == 'localhost')
+        {
+            $this->exec('cp -a "' . $originPath . '" "' . $serverPath . '"');
+        }
+        else
+        {
+            if($this->sshConfig['private_key_file'] != null)
+            {
+                $this->exec('rsync -ar --delete -e "ssh -p ' . $port . ' -i \"' . $this->sshConfig['private_key_file'] . '\" -l ' . $this->sshConfig['user'] . ' -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\"" ' . $rsyncParams . ' "' . $originPath . '" "' . $host . ':' . $serverPath . '"');
+            }
+            else
+            {
+                $this->exec('rsync -ar --delete -e "ssh -p ' . $port . ' -l ' . $this->sshConfig['user'] . ' -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\"" ' . $rsyncParams . ' "' . $originPath . '" "' . $host . ':' . $serverPath . '"');
+            }
+
+        }
     }
 
     /**
