@@ -23,6 +23,7 @@ use JordiLlonch\Bundle\DeployBundle\SSH\SshManager;
 use JordiLlonch\Bundle\DeployBundle\VCS\VcsFactory;
 use JordiLlonch\Bundle\DeployBundle\VCS\VcsInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Finder\Finder;
 
@@ -652,18 +653,28 @@ abstract class BaseDeployer implements DeployerInterface
 
     abstract protected function runClearCache();
 
-    public function exec($command, &$output = null)
+    public function exec($command)
     {
         $this->logger->debug('exec: ' . $command);
 
         if ($this->dryMode) return;
 
-        $outputLastLine = exec($command, $output, $returnVar);
-        if ($returnVar != 0) throw new \Exception('ERROR executing: ' . $command . "\n" . implode("\n", $output));
+        $process = new Process($command);
+        $process->run();
 
-        if(!empty($output)) foreach($output as $item) $this->logger->debug('exec output: ' . $item);
+        if(!$process->isSuccessful())
+        {
+            throw new \Exception('ERROR executing: ' . $command . "\n" .$output);
+        }
 
-        return $outputLastLine;
+        $process_output = $process->getOutput();
+
+        if(!empty($output))
+        {
+            $this->logger->debug('exec output: ' . $process_output);
+        }
+
+        return $process_output;
     }
 
     protected function execRemote(array $servers, $command)
