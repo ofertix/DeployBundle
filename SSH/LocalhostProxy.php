@@ -47,7 +47,7 @@ class LocalhostProxy extends BaseProxy
 
         if(!empty($output)) foreach($output as $item) $this->logger->debug('exec output: ' . $item);
 
-        if($returnVar == 0) $this->lastOutput = implode("\n", $output);
+        if($returnVar == 0) $this->lastOutput = $outputLastLine;
         else $this->lastError = $outputLastLine;
 
         return $returnVar;
