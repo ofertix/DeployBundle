@@ -55,8 +55,7 @@ Usually, after that you should restart webserver or php-fpm.
 
 ### Create a new Symfony 2.3 project
 
-
-```
+```sh
 php composer.phar create-project symfony/framework-standard-edition path/ 2.3.0
 ```
 
@@ -65,7 +64,7 @@ php composer.phar create-project symfony/framework-standard-edition path/ 2.3.0
 
 Add following lines to your `composer.json` file:
 
-```
+```json
 "require": {
   "jordillonch/deploy-bundle": "dev-master"
 },
@@ -73,13 +72,13 @@ Add following lines to your `composer.json` file:
 ```
 Execute:
 
-```
+```sh
 php composer.phar update
 ```
 
 Add it to the `AppKernel.php` class:
 
-```
+```php
 new JordiLlonch\Bundle\DeployBundle\JordiLlonchDeployBundle(),
 ```
 
@@ -89,7 +88,7 @@ new JordiLlonch\Bundle\DeployBundle\JordiLlonchDeployBundle(),
 
 `app/config/parameters.yml`
 
-```
+```yml
 jordi_llonch_deploy:
     config:
         project: MyProject
@@ -114,7 +113,7 @@ jordi_llonch_deploy:
 
 `app/config/parameters_deployer_servers.yml`
 
-```
+```yml
 prod_myproj:
     urls:
         - deploy@testserver1:8822
@@ -128,7 +127,7 @@ prod_myproj:
 
 * First create your own bundle:
 
-```
+```sh
 php app/console generate:bundle --namespace=MyProj/DeployBundle --dir=src --no-interaction
 ```
 
@@ -137,7 +136,7 @@ php app/console generate:bundle --namespace=MyProj/DeployBundle --dir=src --no-i
 `src/MyProj/DeployBundle/Service/Test.php:`
 
 
-```
+```php
 <?php
 
 namespace MyProj/DeployBundle/Service;
@@ -177,7 +176,7 @@ class Test extends BaseDeployer
 
 * Add your deploy class as a service with tag: `jordi_llonch_deploy`
 
-```
+```xml
 <service id="myproj.deployer.test" class="MyProj/DeployBundle/Service/Test">
     <tag name="jordi_llonch_deploy" deployer="myproj"/>
 </service>
@@ -195,7 +194,7 @@ It is necessary to add the public key of the deploy user to `.ssh/authorized_key
 
 After configure the deployer you have to do the initialization.
 
-```
+```sh
 app/console deployer:initialize --zones=prod_myproj
 ```
 
@@ -204,7 +203,7 @@ app/console deployer:initialize --zones=prod_myproj
 
 Now you can download code from your repository and copy to your servers.
 
-```
+```sh
 app/console deployer:download --zones=prod_myproj
 ```
 
@@ -213,7 +212,7 @@ app/console deployer:download --zones=prod_myproj
 
 After download you just need to put code into production.
 
-```
+```sh
 app/console deployer:code2production --zones=prod_myproj
 ```
 
@@ -230,7 +229,7 @@ If there is any problem you can roll back to a previous version. See rollback co
 
 Prepare deployer and remote servers creating a directories structure to host new code.
 
-```
+```sh
 app/console deployer:initialize --zones=[zone1,zone2...]
 ```
 
@@ -239,7 +238,7 @@ app/console deployer:initialize --zones=[zone1,zone2...]
 
 Download code from repository, adapt, warn up… and ship it to remote servers in order to put new code to production.
 
-```
+```sh
 app/console deployer:download --zones=[zone1,zone2...]
 ```
 
@@ -247,7 +246,7 @@ app/console deployer:download --zones=[zone1,zone2...]
 
 Deploy new code to production atomically and reload web server, app...
 
-```
+```sh
 app/console deployer:code2production --zones=[zone1,zone2...]
 ```
 
@@ -257,7 +256,7 @@ app/console deployer:code2production --zones=[zone1,zone2...]
 Ensure that all downloaded versions of code are copied to all servers.
 Useful when you add a new server to a zone. If you not syncronize the new server the rollback operation will break the code in the new server.
 
-```
+```sh
 app/console deployer:syncronize --zones=prod_myproj
 ```
 
@@ -269,7 +268,7 @@ If there is any problem and you need to roll back to a previous version you have
 
 #### Using number of steps to roll back
 
-```
+```sh
 app/console deployer:rollback execute [steps_backward] --zones=[zone1]
 ```
 
@@ -280,13 +279,13 @@ app/console deployer:rollback execute [steps_backward] --zones=[zone1]
 
 1) Ask deploy for available versions to rollback.
 
-```
+```sh
 app/console deployer:rollback list --zones=[zone1]
 ```
 
 2) Execute rollback to specific version
 
-```
+```sh
 app/console deployer:rollback execute [version] --zones=[zone1]
 ```
 
@@ -295,7 +294,7 @@ app/console deployer:rollback execute [version] --zones=[zone1]
 
 Shows running version and last downloaded version prepared to put to production.
 
-```
+```sh
 app/console deployer:status [--zones=[zone1,zone2...]]
 ```
 
@@ -304,7 +303,7 @@ app/console deployer:status [--zones=[zone1,zone2...]]
 
 Configure remote servers for zones. Useful for automatize scaling.
 
-```
+```sh
 app/console deployer:configure zone [add, set, rm, list, list_json] [url]
 ```
 
@@ -313,7 +312,7 @@ app/console deployer:configure zone [add, set, rm, list, list_json] [url]
 
 Remove old code. Left `clean_max_deploys` deploys.
 
-```
+```sh
 app/console deployer:clean
 ```
 
@@ -322,7 +321,7 @@ app/console deployer:clean
 
 Executes command passed as argument to all configured servers.
 
-```
+```sh
 app/console deployer:exec2servers [command]
 ```
 
@@ -338,7 +337,7 @@ You must set general configurations and zones.
 
 `app/config/parameters.yml`
 
-```
+```yml
 jordi_llonch_deploy:
     config:
         project: MyProject
@@ -402,7 +401,7 @@ Ssh configuration to establish connections on remote servers to execute commands
 
 Here an example of configuration:
 
-```
+```yml
 ssh:
     proxy: cli
     user: jllonch
@@ -474,7 +473,7 @@ jordi_llonch_deploy:
 
 `app/config/parameters_deployer_servers.yml`
 
-```
+```yml
 prod_myproj:
     urls:
         - deploy@testserver1:8822
@@ -485,7 +484,7 @@ prod_myproj:
 
 Name of the service used to deploy the zone.
 
-```
+```xml
 <service id="myproj.deployer.test" class="MyProj/DeployBundle/Service/Test">
     <tag name="jordi_llonch_deploy" deployer="myproj"/>
 </service>
@@ -728,14 +727,17 @@ helper:
 #### Files
 Provides several methods to work with files.
 * Replace strings that matches the given regular expression in the given array of files:
- ```php
+
+```php
  $this->getHelper('files')->filesReplacePattern(
               array($this->getLocalNewRepositoryDir() . '/app/config/parameters.yml'),
               '/database_user: developer_user/',
               'database_user: production_user'
   );
-  ```
+```
+
 * Copy files:
+
 ```php
 $this->getHelper('files')->copyFile(
     $this->getLocalNewRepositoryDir() . '/app/config/parameters.yml.dist',
