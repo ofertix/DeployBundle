@@ -103,6 +103,7 @@ abstract class BaseDeployer implements DeployerInterface
             new HipChatHelper(),
             new PhpFpmHelper(),
             new Symfony2Helper(),
+            new FilesHelper()
         );
     }
 
