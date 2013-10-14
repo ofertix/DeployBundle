@@ -39,4 +39,22 @@ class FilesHelper extends Helper {
 
         return true;
     }
+
+    public function copyFile($origin_path,$destination_path)
+    {
+        $error = "";
+        if(!file_exists($origin_path))
+        {
+            return 'File "'. $origin_path .'" does not exists.';
+        }
+
+        $result = copy($origin_path,$destination_path);
+
+        if($result === false)
+        {
+            return 'File "'. $origin_path .'" not copied to "'.$destination_path.'"';
+        }
+
+        return true;
+    }
 }
