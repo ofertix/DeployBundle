@@ -664,14 +664,14 @@ abstract class BaseDeployer implements DeployerInterface
         $process = new Process($command);
         $process->run();
 
+        $process_output = $process->getOutput();
+
         if(!$process->isSuccessful())
         {
             throw new \Exception('ERROR executing: ' . $command . "\n" .$output);
         }
 
-        $process_output = $process->getOutput();
-
-        if(!empty($output))
+        if(!empty($process_output))
         {
             $this->logger->debug('exec output: ' . $process_output);
         }
