@@ -121,7 +121,7 @@ prod_myproj:
         - deploy@testserver2:8822
 ```
 
-* Note: Servers urls are in other file (`parameters_deployers_servers.yml`) because this file contains a dynamic configuration that would be changed in a scalable environment like AWS.
+* Note: Servers urls are in other file (`parameters_deployer_servers.yml`) because this file contains a dynamic configuration that would be changed in a scalable environment like AWS.
 
 
 ### Create a deploy class to myproj
@@ -433,11 +433,11 @@ Password used in auth by password.
 
 ##### public_key_file
 
-Public key file path.
+(Optional) Public key file path. If not defined will use current user default public key usually stored in ~/.ssh/id_rsa.pub
 
 ##### private_key_file
 
-Private key file path.
+(Optional) Private key file path. If not defined will use current user default private key usually stored in ~/.ssh/id_rsa.pub
 
 ##### private_key_file_pwd
 
