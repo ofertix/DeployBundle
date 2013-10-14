@@ -555,7 +555,7 @@ Here and example:
 `src/MyProj/DeployBundle/Service/Test.php:`
 
 
-```
+```php
 <?php
 
 namespace MyProj/DeployBundle/Service;
@@ -618,11 +618,15 @@ class Test extends BaseDeployer
 
 Easy way to manage shared directories.
 
-`$this->getHelper('shared_dirs')->initialize($path)`
+```php
+$this->getHelper('shared_dirs')->initialize($path)
+```
 
 * Initialize given path in the shared directory.
 
-`$this->getHelper('shared_dirs')->set($pathInAppToLink, $pathInSharedDir)`
+```php
+$this->getHelper('shared_dirs')->set($pathInAppToLink, $pathInSharedDir)
+```
 
 * Set shared directory for a given path in the project that will be removed and replaced by a symlink to given path to shared directory.
 
@@ -630,11 +634,15 @@ Easy way to manage shared directories.
 
 Provides methods to restart php-fpm gracefully.
 
-`$this->getHelper('phpfpm')->refresh()`
+```php
+$this->getHelper('phpfpm')->refresh()
+```
 
 * Refresh php-fpm gracefully but you must configure your webserver (e.g. Nginx) to retry the request.
 
-`$this->getHelper('phpfpm')->refreshCommand()`
+```php
+$this->getHelper('phpfpm')->refreshCommand()
+```
 
 * Command used to reload php-fpm
 
@@ -643,11 +651,15 @@ Provides methods to restart php-fpm gracefully.
 
 Helpers to manage composer installation and some commands.
 
-`$this->getHelper('composer')->install()`
+```php
+$this->getHelper('composer')->install()
+```
 
 * Install composer.phar in the new repository dir.
 
-`$this->getHelper('composer')->executeInstall()`
+```php
+$this->getHelper('composer')->executeInstall()
+```
 
 * Executes composer install in the new repository dir.
 * If environment is dev or test --dev parameter is added to composer install
@@ -658,7 +670,9 @@ Helpers to manage composer installation and some commands.
 
 For now only provides a method to do a cache warm up.
 
-`$this->getHelper('symfony2')->cacheWarmUp()`
+```php
+$this->getHelper('symfony2')->cacheWarmUp()
+```
 
 * Do a cache:warmup for production environment
 
@@ -667,7 +681,9 @@ For now only provides a method to do a cache warm up.
 
 Useful methods to have feedback of your deploy in GitHub.
 
-`$this->getHelper('github')->getCompareUrl($gitUidFrom, $gitUidTo)`
+```php
+$this->getHelper('github')->getCompareUrl($gitUidFrom, $gitUidTo)
+```
 
 * Give an url comparing two commits
 * You must set your http url to your GitHub repository in jordi_llonch_deploy.zones parameters:
@@ -678,7 +694,9 @@ helper:
         url: https://github.com/YourUser/Repository
 ```
 
-`$this->getHelper('github')->getCompareUrlFromCurrentCodeToNewRepository()`
+```php
+$this->getHelper('github')->getCompareUrlFromCurrentCodeToNewRepository()
+```
 
 * Give an url comparing commits between current running code and the new downloaded code.
 
@@ -687,7 +705,9 @@ helper:
 
 Provides a method to send messages to a room in a HipChat.
 
-`$this->getHelper('hipchat')->send($msg, $color='purple')`
+```php
+$this->getHelper('hipchat')->send($msg, $color='purple')
+```
 
 * Send a message to a given room
 * You must set your token and room_id to your HipChat in jordi_llonch_deploy.general parameters:
@@ -701,16 +721,20 @@ helper:
 #### Files
 Provides several methods to work with files.
 * Replace strings that matches the given regular expression in the given array of files:
- `$this->getHelper('files')->filesReplacePattern(
+ ```php
+ $this->getHelper('files')->filesReplacePattern(
               array($this->getLocalNewRepositoryDir() . '/app/config/parameters.yml'),
               '/database_user: developer_user/',
               'database_user: production_user'
-  )`
+  );
+  ```
 * Copy files:
-`$this->getHelper('files')->copyFile(
+```php
+$this->getHelper('files')->copyFile(
     $this->getLocalNewRepositoryDir() . '/app/config/parameters.yml.dist',
     $this->getLocalNewRepositoryDir() . '/app/config/parameters.yml'
- );`
+ );
+```
 
 
 ## TODO
