@@ -621,6 +621,15 @@ abstract class BaseDeployer implements DeployerInterface
         }
     }
 
+    public function runMigrate($version = null)
+    {
+        $this->logger->debug(__METHOD__);
+
+        if (!$this->dryMode) {
+            $this->migrateDB($version);
+        }
+    }
+
     public function runCode2ProductionRollback()
     {
         $this->logger->debug(__METHOD__);
