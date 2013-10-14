@@ -64,7 +64,7 @@ class Configuration implements ConfigurationInterface
                                     ->end()
                                     ->scalarNode('public_key_file')
                                     ->end()
-                                    ->scalarNode('private_key_file')->isRequired()
+                                    ->scalarNode('private_key_file')
                                     ->end()
                                     ->scalarNode('private_key_file_pwd')
                                     ->end()
