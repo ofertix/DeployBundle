@@ -35,16 +35,16 @@ Furthermore this bundle offers **helpers** to automatize common operations like 
 There are two basic ideas that allows to deploy several code versions and put one of them to production and rollback between them.
 
 
-When you want to deploy new code you have to do a "*download*" operation. That operation clones code from your git repository to a new directory (e.g. 20130704_180131_a618a56b08549794ec4c9d5db29058a01a58977f) then do adaptations to the code. Adaptations are the step where configurations are added, app cache is warned up, dependencies are downloaded and installed, symlinks are created to shared directories… 
+When you want to deploy new code you have to do a "*download*" operation. That operation clones code from your git repository to a new directory (e.g. 20130704_180131_a618a56b08549794ec4c9d5db29058a01a58977f) then do adaptations to the code. Adaptations are the step where configurations are added, app cache is warned up, dependencies are downloaded and installed, symlinks are created to shared directories…
 
 Shared directories are directories where there are data that you want to keep between deploys. (e.g. logs, reports, generated images...)
 
 After that, code is copied to configured servers. Ssh authorized keys are used to allow copy and execute commands to remote servers.
 
 
-Then, when you want to use last downloaded code to production you have to execute "*code to production*" operation. This operation modify a symlink to the directory where last version are downloaded. 
+Then, when you want to use last downloaded code to production you have to execute "*code to production*" operation. This operation modify a symlink to the directory where last version are downloaded.
 
-Usually, after that you should restart webserver or php-fpm. 
+Usually, after that you should restart webserver or php-fpm.
 
 
 *Note*: These ideas are taken from Capistrano.
@@ -54,13 +54,13 @@ Usually, after that you should restart webserver or php-fpm.
 
 
 ### Create a new Symfony 2.3 project
- 
 
-```    
+
+```
 php composer.phar create-project symfony/framework-standard-edition path/ 2.3.0
 ```
 
-    
+
 ### Install the bundle
 
 Add following lines to your `composer.json` file:
@@ -82,7 +82,7 @@ Add it to the `AppKernel.php` class:
 ```
 new JordiLlonch\Bundle\DeployBundle\JordiLlonchDeployBundle(),
 ```
-    
+
 
 
 ### Configure general settings and a zone
@@ -154,7 +154,7 @@ class Test extends BaseDeployer
 
         $this->logger->debug('Adapting code');
         $this->output->writeln('<info>Adapting code...</info>');
-        // Here you can download vendors, add productions configuration, 
+        // Here you can download vendors, add productions configuration,
         // do cache warm up, set shared directories...
 
         $this->logger->debug('Copying code to zones...');
@@ -184,7 +184,7 @@ class Test extends BaseDeployer
 ```
 
 * `myproj` is used in the configuration as `deployer` value.
-            
+
 
 ### Allow ssh access to remote servers
 
@@ -448,10 +448,10 @@ Private key password.
 
 Helper parameters that can be get in your deploy class.
 
-        
+
 ### Zones configuration
 
-You need to set a minimum of one zone. Here is created your zone `prod_myproj`: 
+You need to set a minimum of one zone. Here is created your zone `prod_myproj`:
 
 `app/config/parameters.yml`
 
@@ -555,7 +555,7 @@ Here and example:
 `src/MyProj/DeployBundle/Service/Test.php:`
 
 
-```
+```php
 <?php
 
 namespace MyProj/DeployBundle/Service;
@@ -618,11 +618,15 @@ class Test extends BaseDeployer
 
 Easy way to manage shared directories.
 
-`$this->getHelper('shared_dirs')->initialize($path)`
+```php
+$this->getHelper('shared_dirs')->initialize($path)
+```
 
 * Initialize given path in the shared directory.
 
-`$this->getHelper('shared_dirs')->set($pathInAppToLink, $pathInSharedDir)`
+```php
+$this->getHelper('shared_dirs')->set($pathInAppToLink, $pathInSharedDir)
+```
 
 * Set shared directory for a given path in the project that will be removed and replaced by a symlink to given path to shared directory.
 
@@ -630,11 +634,15 @@ Easy way to manage shared directories.
 
 Provides methods to restart php-fpm gracefully.
 
-`$this->getHelper('phpfpm')->refresh()`
+```php
+$this->getHelper('phpfpm')->refresh()
+```
 
 * Refresh php-fpm gracefully but you must configure your webserver (e.g. Nginx) to retry the request.
 
-`$this->getHelper('phpfpm')->refreshCommand()`
+```php
+$this->getHelper('phpfpm')->refreshCommand()
+```
 
 * Command used to reload php-fpm
 
@@ -643,11 +651,15 @@ Provides methods to restart php-fpm gracefully.
 
 Helpers to manage composer installation and some commands.
 
-`$this->getHelper('composer')->install()`
+```php
+$this->getHelper('composer')->install()
+```
 
 * Install composer.phar in the new repository dir.
 
-`$this->getHelper('composer')->executeInstall()`
+```php
+$this->getHelper('composer')->executeInstall()
+```
 
 * Executes composer install in the new repository dir.
 * If environment is dev or test --dev parameter is added to composer install
@@ -660,12 +672,14 @@ For now only provides a method to do a cache warm up.
 
 `$this->getHelper('symfony2')->cacheWarmupOnServers()`
 
-* Do a cache:warmup for production environment. This operation should be executed after code2Servers() operation. 
+* Do a cache:warmup for production environment. This operation should be executed after code2Servers() operation.
 
 
 ##### Deprecated:
 
-`$this->getHelper('symfony2')->cacheWarmUp()`
+```php
+$this->getHelper('symfony2')->cacheWarmUp()
+```
 
 * This warmup it is not a secure operation because serialized data could be corrupted.
 
@@ -674,7 +688,9 @@ For now only provides a method to do a cache warm up.
 
 Useful methods to have feedback of your deploy in GitHub.
 
-`$this->getHelper('github')->getCompareUrl($gitUidFrom, $gitUidTo)`
+```php
+$this->getHelper('github')->getCompareUrl($gitUidFrom, $gitUidTo)
+```
 
 * Give an url comparing two commits
 * You must set your http url to your GitHub repository in jordi_llonch_deploy.zones parameters:
@@ -685,7 +701,9 @@ helper:
         url: https://github.com/YourUser/Repository
 ```
 
-`$this->getHelper('github')->getCompareUrlFromCurrentCodeToNewRepository()`
+```php
+$this->getHelper('github')->getCompareUrlFromCurrentCodeToNewRepository()
+```
 
 * Give an url comparing commits between current running code and the new downloaded code.
 
@@ -694,7 +712,9 @@ helper:
 
 Provides a method to send messages to a room in a HipChat.
 
-`$this->getHelper('hipchat')->send($msg, $color='purple')`
+```php
+$this->getHelper('hipchat')->send($msg, $color='purple')
+```
 
 * Send a message to a given room
 * You must set your token and room_id to your HipChat in jordi_llonch_deploy.general parameters:
@@ -708,16 +728,20 @@ helper:
 #### Files
 Provides several methods to work with files.
 * Replace strings that matches the given regular expression in the given array of files:
- `$this->getHelper('files')->filesReplacePattern(
+ ```php
+ $this->getHelper('files')->filesReplacePattern(
               array($this->getLocalNewRepositoryDir() . '/app/config/parameters.yml'),
               '/database_user: developer_user/',
               'database_user: production_user'
-  )`
+  );
+  ```
 * Copy files:
-`$this->getHelper('files')->copyFile(
+```php
+$this->getHelper('files')->copyFile(
     $this->getLocalNewRepositoryDir() . '/app/config/parameters.yml.dist',
     $this->getLocalNewRepositoryDir() . '/app/config/parameters.yml'
- );`
+ );
+```
 
 
 ## TODO
