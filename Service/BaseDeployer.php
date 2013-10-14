@@ -451,7 +451,7 @@ abstract class BaseDeployer implements DeployerInterface
         }
         else
         {
-            if($this->sshConfig['private_key_file'] != null)
+            if(array_key_exists('private_key_file',$this->sshConfig) && $this->sshConfig['private_key_file'] != null)
             {
                 $this->exec('rsync -ar --delete -e "ssh -p ' . $port . ' -i \"' . $this->sshConfig['private_key_file'] . '\" -l ' . $this->sshConfig['user'] . ' -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\"" ' . $rsyncParams . ' "' . $originPath . '" "' . $host . ':' . $serverPath . '"');
             }
