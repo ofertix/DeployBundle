@@ -669,13 +669,14 @@ abstract class BaseDeployer implements DeployerInterface
 
     abstract protected function runClearCache();
 
-    public function exec($command)
+    public function exec($command,$timeout = 3600)
     {
         $this->logger->debug('exec: ' . $command);
 
         if ($this->dryMode) return;
 
         $process = new Process($command);
+        $process->setTimeout($timeout);
         $process->run();
 
         $process_output = $process->getOutput();
