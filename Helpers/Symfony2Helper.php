@@ -48,7 +48,7 @@ class Symfony2Helper extends Helper {
     {
         $localNewRepositoryDir = $this->getDeployer()->getLocalNewRepositoryDir();
         $this->getDeployer()->exec('rm -rf ' . $localNewRepositoryDir . '/web/bundles');
-        $this->getDeployer()->exec('php ' . $localNewRepositoryDir . '/app/console assets:install  --env=prod --no-debug');
+        $this->getDeployer()->exec('php ' . $localNewRepositoryDir . '/app/console assets:install '.$localNewRepositoryDir . '/web/bundles  --env=prod --no-debug');
     }
 
     public function asseticDump()
