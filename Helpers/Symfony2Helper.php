@@ -43,4 +43,17 @@ class Symfony2Helper extends Helper {
         $filesHelper->filesReplacePattern($paths, $pattern, $replace);
         $this->getDeployer()->exec('chmod -R a+wr ' . $localNewRepositoryDir . '/app/cache');
     }
+
+    public function assetsDump()
+    {
+        $localNewRepositoryDir = $this->getDeployer()->getLocalNewRepositoryDir();
+        $this->getDeployer()->exec('rm -rf ' . $localNewRepositoryDir . '/web/bundles');
+        $this->getDeployer()->exec('php ' . $localNewRepositoryDir . '/app/console assets:install  --env=prod --no-debug');
+    }
+
+    public function asseticDump()
+    {
+        $localNewRepositoryDir = $this->getDeployer()->getLocalNewRepositoryDir();
+        $this->getDeployer()->exec('php ' . $localNewRepositoryDir . '/app/console assetic:dump  --env=prod --no-debug');
+    }
 }
