@@ -15,6 +15,7 @@ The bundle provides some commands to automatize deploy process. Here are main co
 * **Initialize**: Prepare deployer and remote servers creating a directories structure to host new code.
 * **Download**: Download code from repository, adapt, warn up… and ship it to remote servers in order to put new code to production.
 * **Code to production**. Deploy new code to production atomically and reload web server, app…
+* **Migrate**: Run database migrations.
 * **Rollback**. Return back to previous deployed version.
 
 Deployer have zones configured to deploy new code.
@@ -217,7 +218,6 @@ After download you just need to put code into production.
 app/console deployer:code2production --zones=prod_myproj
 ```
 
-
 ### Rollback
 
 If there is any problem you can roll back to a previous version. See rollback command help.
@@ -250,7 +250,11 @@ Deploy new code to production atomically and reload web server, app...
 ```sh
 app/console deployer:code2production --zones=[zone1,zone2...]
 ```
-
+### Migrate
+Perform migrations on your enviroment database
+```sh
+app/console deployer:migrate [version_number] --zones=prod_myproj
+```
 
 ### syncronize
 
