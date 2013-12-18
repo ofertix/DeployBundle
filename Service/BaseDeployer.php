@@ -980,4 +980,29 @@ abstract class BaseDeployer implements DeployerInterface
         return $arrListDir;
     }
 
+    public function runMigration($version = false)
+    {
+        // Check if deployer has been initialized
+        if(!file_exists($this->getLocalRepositoryDir())) throw new \Exception('It seems deployer has not been initialized.');
+
+        if($version == false)
+        {
+            $this->migrateLatest();
+        }
+        else
+        {
+            $this->migrateVersion($version);
+        }
+    }
+
+    protected function migrateLatest()
+    {
+        $this->exec('php ' . $this->getLocalNewRepositoryDir() . '/app/console doctrine:migrations:migrate --env=prod --no-debug');
+    }
+
+    protected function migrateVersion($version)
+    {
+        $this->exec('php ' . $this->getLocalNewRepositoryDir() . '/app/console doctrine:migrations:migrate '.$version.' --env=prod --no-debug');
+    }
+
 }
