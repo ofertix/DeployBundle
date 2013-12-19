@@ -54,6 +54,6 @@ class Symfony2Helper extends Helper {
     public function asseticDump()
     {
         $localNewRepositoryDir = $this->getDeployer()->getLocalNewRepositoryDir();
-        $this->getDeployer()->exec('php ' . $localNewRepositoryDir . '/app/console assetic:dump  --env=prod --no-debug');
+        $this->getDeployer()->exec('php ' . $localNewRepositoryDir . '/app/console assetic:dump --no-debug');
     }
 }
