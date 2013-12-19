@@ -671,7 +671,7 @@ $this->getHelper('composer')->executeInstall()
 
 #### Symfony2
 
-For now only provides a method to do a cache warm up.
+Helper to manage cache warmup and other symfony commands like assets:dump and assetic:dump
 
 `$this->getHelper('symfony2')->cacheWarmupOnServers()`
 
@@ -685,6 +685,18 @@ $this->getHelper('symfony2')->cacheWarmUp()
 ```
 
 * This warmup it is not a secure operation because serialized data could be corrupted.
+
+```php
+$this->getHelper('symfony2')->assetsDump()
+```
+
+* Do a assets:dump for production environment
+
+```php
+$this->getHelper('symfony2')->asseticDump()
+```
+
+* Do a assetic:dump for production environment
 
 
 #### GitHub
