@@ -53,6 +53,7 @@ abstract class BaseDeployer implements DeployerInterface
     protected $helpersConfig;
     protected $newVersionRollback;
     protected $currentVersionRollback;
+    protected $disableAutoRollback = false;
     protected $vcsType;
 
     /**
@@ -619,6 +620,13 @@ abstract class BaseDeployer implements DeployerInterface
         // rollback it is necessary
         if (empty($this->newVersionRollback)) return;
 
+        if($this->disableAutoRollback)
+        {
+            $this->logger->debug('Rollback disabled');
+            $this->output->writeln('<error>ROLLBACK [' . $zone . ']: Disabled</error>');
+            return;
+        }
+
         try {
             $this->downloadCodeRollback();
 
@@ -828,6 +836,7 @@ abstract class BaseDeployer implements DeployerInterface
     {
         $this->logger->debug(__METHOD__);
 
+
         $arrListDir = $this->getVersionDirList();
         $r = array();
         foreach($arrListDir as $item) {
@@ -845,6 +854,7 @@ abstract class BaseDeployer implements DeployerInterface
 
         return $r;
     }
+
 
     public function getStatus()
     {
@@ -1040,4 +1050,11 @@ abstract class BaseDeployer implements DeployerInterface
         $this->exec('php ' . $this->getLocalNewRepositoryDir() . '/app/console doctrine:migrations:migrate '.$version.' --env=prod --no-debug');
     }
 
+    /**
+     * @param boolean $autorollback
+     */
+    public function setDisableAutoRollback($autorollback)
+    {
+        $this->disableAutoRollback = $autorollback;
+    }
 }

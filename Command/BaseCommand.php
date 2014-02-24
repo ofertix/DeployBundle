@@ -28,6 +28,7 @@ abstract class BaseCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->addOption('zones', null, InputOption::VALUE_REQUIRED, 'Zones to execute command. It must exists in jordi_llonch_deploy.zones config.');
+        $this->addOption('disablerollback',false,InputOption::VALUE_NONE,'Disable download rollback if something breaks apart');
 
         // TODO: dry mode
     }
