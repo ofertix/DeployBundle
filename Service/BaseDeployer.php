@@ -623,7 +623,7 @@ abstract class BaseDeployer implements DeployerInterface
         if($this->disableAutoRollback)
         {
             $this->logger->debug('Rollback disabled');
-            $this->output->writeln('<error>ROLLBACK [' . $zone . ']: Disabled</error>');
+            $this->output->writeln('<error>ROLLBACK Disabled</error>');
             return;
         }
 
