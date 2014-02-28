@@ -56,6 +56,7 @@ Usually, after that you should restart webserver or php-fpm.
 
 ### Create a new Symfony 2.3 project
 
+
 ```sh
 php composer.phar create-project symfony/framework-standard-edition path/ 2.3.0
 ```
@@ -759,6 +760,14 @@ $this->getHelper('files')->copyFile(
     $this->getLocalNewRepositoryDir() . '/app/config/parameters.yml.dist',
     $this->getLocalNewRepositoryDir() . '/app/config/parameters.yml'
  );
+```
+
+#### Supervisord
+Provides a method to restart supervisord programs on remote servers
+* Restart a certain program
+
+```php
+  $this->getHelper('supervisord')->restart('program');
 ```
 
 
