@@ -17,6 +17,7 @@ use JordiLlonch\Bundle\DeployBundle\Helpers\HelperSet;
 use JordiLlonch\Bundle\DeployBundle\Helpers\HipChatHelper;
 use JordiLlonch\Bundle\DeployBundle\Helpers\PhpFpmHelper;
 use JordiLlonch\Bundle\DeployBundle\Helpers\SharedDirsHelper;
+use JordiLlonch\Bundle\DeployBundle\Helpers\SupervisordHelper;
 use JordiLlonch\Bundle\DeployBundle\Helpers\Symfony2;
 use JordiLlonch\Bundle\DeployBundle\Helpers\Symfony2Helper;
 use JordiLlonch\Bundle\DeployBundle\Helpers\FilesHelper;
@@ -108,7 +109,8 @@ abstract class BaseDeployer implements DeployerInterface
             new HipChatHelper(),
             new PhpFpmHelper(),
             new Symfony2Helper(),
-            new FilesHelper()
+            new FilesHelper(),
+            new SupervisordHelper()
         );
     }
 
