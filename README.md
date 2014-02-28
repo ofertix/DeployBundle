@@ -779,7 +779,8 @@ Provides a method to restart supervisord programs on remote servers
 
 ## Author
 
-Jordi Llonch - llonch.jordi at gmail dot com
+- Jordi Llonch - llonch.jordi at gmail dot com
+- Miquel Company - miquel at solilokiam dot com
 
 
 ## License
