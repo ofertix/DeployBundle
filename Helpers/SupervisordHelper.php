@@ -27,6 +27,6 @@ class SupervisordHelper extends Helper
 
     private function restartCommand($programName)
     {
-        return 'sudo supervisor_handler.sh -a restart -p ' . $programName . ' -r';
+        return 'sudo supervisorctl restart ' . $programName . ' -r';
     }
 }
