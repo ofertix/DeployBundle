@@ -699,6 +699,24 @@ $this->getHelper('symfony2')->asseticDump()
 
 * Do a assetic:dump for production environment
 
+```php
+$this->getHelper('symfony2')->clearDoctrineMetadataCache();
+```
+
+* Clear doctrine metadata cache
+
+```php
+$this->getHelper('symfony2')->clearDoctrineQueryCache();
+```
+
+* Clear doctrine query cache
+
+```php
+$this->getHelper('symfony2')->clearDoctrineResultCache();
+```
+
+* Clear doctrine result cache
+
 
 #### GitHub
 
