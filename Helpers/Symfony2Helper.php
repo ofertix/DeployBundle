@@ -74,4 +74,28 @@ class Symfony2Helper extends Helper {
         $localNewRepositoryDir = $this->getDeployer()->getLocalNewRepositoryDir();
         $this->getDeployer()->exec('php ' . $localNewRepositoryDir . '/app/console assetic:dump --env=prod --no-debug');
     }
+
+    public function clearDoctrineMetadataCache()
+    {
+        $remoteCodeDir = $this->getDeployer()->getRemoteProductionCodeDir();
+        $this->deployer->execRemoteServers(
+            'php ' . $remoteCodeDir . '/app/console doctrine:cache:clear-metadata --env=prod --no-debug'
+        );
+    }
+
+    public function clearDoctrineQueryCache()
+    {
+        $remoteCodeDir = $this->getDeployer()->getRemoteProductionCodeDir();
+        $this->deployer->execRemoteServers(
+            'php ' . $remoteCodeDir . '/app/console doctrine:cache:clear-query --env=prod --no-debug'
+        );
+    }
+
+    public function clearDoctrineResultCache()
+    {
+        $remoteCodeDir = $this->getDeployer()->getRemoteProductionCodeDir();
+        $this->deployer->execRemoteServers(
+            'php ' . $remoteCodeDir . '/app/console doctrine:cache:clear-result --env=prod --no-debug'
+        );
+    }
 }
