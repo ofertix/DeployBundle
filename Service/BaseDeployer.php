@@ -1054,7 +1054,7 @@ abstract class BaseDeployer implements DeployerInterface
     {
         $this->execRemoteServersOnce(
             'php ' . $this->getRemoteProductionCodeDir(
-            ) . '/app/console doctrine:migrations:migrate --env=prod --no-debug'
+            ) . '/app/console doctrine:migrations:migrate --env=prod --no-debug --no-interaction'
         );
     }
 
@@ -1062,7 +1062,7 @@ abstract class BaseDeployer implements DeployerInterface
     {
         $this->execRemoteServersOnce(
             'php ' . $this->getRemoteProductionCodeDir(
-            ) . '/app/console doctrine:migrations:migrate ' . $version . ' --env=prod --no-debug'
+            ) . '/app/console doctrine:migrations:migrate ' . $version . ' --env=prod --no-debug --no-interaction'
         );
     }
 
