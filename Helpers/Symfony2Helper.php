@@ -67,29 +67,29 @@ class Symfony2Helper extends Helper {
         $localNewRepositoryDir = $this->getDeployer()->getLocalNewRepositoryDir();
         $this->getDeployer()->exec('rm -rf ' . $localNewRepositoryDir . '/web/bundles');
         $this->getDeployer()->exec(
-            'php ' . $localNewRepositoryDir . '/app/console assets:install ' . $localNewRepositoryDir . '/web'
+            'php ' . $localNewRepositoryDir . '/app/console assets:install ' . $localNewRepositoryDir . '/web  --env=prod --no-debug'
         );
     }
 
     public function asseticDump()
     {
         $localNewRepositoryDir = $this->getDeployer()->getLocalNewRepositoryDir();
-        $this->getDeployer()->exec('php ' . $localNewRepositoryDir . '/app/console assetic:dump');
+        $this->getDeployer()->exec('php ' . $localNewRepositoryDir . '/app/console assetic:dump --env=prod --no-debug');
     }
 
     public function clearDoctrineMetadataCache()
     {
         $remoteCodeDir = $this->getDeployer()->getRemoteProductionCodeDir();
-        $this->deployer->execRemoteServers(
-            'php ' . $remoteCodeDir . '/app/console doctrine:cache:clear-metadata --env=prod --no-debug'
+        $this->deployer->execRemoteServersOnce(
+        'php ' . $remoteCodeDir . '/app/console doctrine:cache:clear-metadata --env=prod --no-debug'
         );
     }
 
     public function clearDoctrineQueryCache()
     {
         $remoteCodeDir = $this->getDeployer()->getRemoteProductionCodeDir();
-        $this->deployer->execRemoteServers(
-            'php ' . $remoteCodeDir . '/app/console doctrine:cache:clear-query --env=prod --no-debug'
+        $this->deployer->execRemoteServersOnce(
+        'php ' . $remoteCodeDir . '/app/console doctrine:cache:clear-query --env=prod --no-debug'
         );
     }
 

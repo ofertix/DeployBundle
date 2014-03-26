@@ -766,6 +766,14 @@ abstract class BaseDeployer implements DeployerInterface
         return $r;
     }
 
+    public function execRemoteServersOnce($command)
+    {
+        $servers = array($this->urls[0]);
+        $r = $this->execRemote($servers, $command);
+
+        return $r;
+    }
+
     /**
      * Execute command to current host and all servers in config
      * @param string $command
@@ -1044,12 +1052,18 @@ abstract class BaseDeployer implements DeployerInterface
 
     protected function migrateLatest()
     {
-        $this->exec('php ' . $this->getLocalNewRepositoryDir() . '/app/console doctrine:migrations:migrate --env=prod --no-debug');
+        $this->execRemoteServersOnce(
+            'php ' . $this->getRemoteProductionCodeDir(
+            ) . '/app/console doctrine:migrations:migrate --env=prod --no-debug'
+        );
     }
 
     protected function migrateVersion($version)
     {
-        $this->exec('php ' . $this->getLocalNewRepositoryDir() . '/app/console doctrine:migrations:migrate '.$version.' --env=prod --no-debug');
+        $this->execRemoteServersOnce(
+            'php ' . $this->getRemoteProductionCodeDir(
+            ) . '/app/console doctrine:migrations:migrate ' . $version . ' --env=prod --no-debug'
+        );
     }
 
     /**
