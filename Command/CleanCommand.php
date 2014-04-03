@@ -24,6 +24,7 @@ class CleanCommand extends BaseCommand
         $this
             ->setName('deployer:clean')
             ->setDescription('Remove old code. Left <info>clean_max_deploys</info> deploys.')
+            ->addOption('sudo', null, InputOption::VALUE_NONE)
             ->setHelp(<<<EOT
 The <info>deployer:clean</info> removes old code. Left <info>clean_max_deploys</info> deploys..
 EOT
@@ -32,6 +33,10 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-      $this->deployer->runClean();
+        if ($input->getOption('sudo')) {
+            $this->deployer->setSudo(true);
+        }
+
+        $this->deployer->runClean();
     }
 }

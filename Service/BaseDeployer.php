@@ -1073,4 +1073,16 @@ abstract class BaseDeployer implements DeployerInterface
     {
         $this->disableAutoRollback = $autorollback;
     }
+
+    /**
+     * @param boolean $sudo
+     */
+    public function setSudo($sudo)
+    {
+        $this->sudo = $sudo;
+
+        return $this;
+    }
+
+
 }
