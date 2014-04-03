@@ -42,6 +42,7 @@ abstract class BaseDeployer implements DeployerInterface
     protected $checkoutProxy = false;
     protected $cleanMaxDeploys = 7;
     protected $dryMode = false;
+    protected $force = false;
     protected $newVersion;
     protected $currentVersion;
     protected $output;
@@ -50,6 +51,7 @@ abstract class BaseDeployer implements DeployerInterface
     protected $helpersConfig;
     protected $newVersionRollback;
     protected $currentVersionRollback;
+    protected $vcsType;
 
     /**
      * @var LoggerInterface
@@ -185,6 +187,7 @@ abstract class BaseDeployer implements DeployerInterface
         $this->checkoutBranch = $config['checkout_branch'];
         $this->remoteRepositoryDir = $config['repository_dir'];
         $this->remoteProductionDir = $config['production_dir'];
+        $this->vcsType = $config['vcs'];
         if (!empty($config['checkout_proxy'])) $this->checkoutProxy = $config['checkout_proxy'];
         if (!empty($config['clean_max_deploys'])) $this->cleanMaxDeploys = $config['clean_max_deploys'];
         if (!empty($config['sudo'])) $this->sudo = $config['sudo'];
@@ -209,8 +212,7 @@ abstract class BaseDeployer implements DeployerInterface
             $this->newVersion = null;
 
         // vcs
-        $vcsFactory = new VcsFactory($this->checkoutUrl, $this->checkoutBranch, $this->checkoutProxy, $this->dryMode);
-        $this->setVcs($vcsFactory->create($config['vcs']));
+        $this->createVcs();
 
         // ssh
         $this->setSshManager(new SshManager($config['ssh']));
@@ -218,6 +220,38 @@ abstract class BaseDeployer implements DeployerInterface
 
         // After define config, set deployer for helpers because now there are helpers configs
         $this->helperSet->setDeployer($this);
+    }
+
+    /**
+     * @param boolean $force
+     */
+    public function setForce($force = true)
+    {
+        $this->force = $force;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getForce()
+    {
+        return $this->force;
+    }
+
+    /**
+     * @param mixed $urls
+     */
+    public function setUrls($urls)
+    {
+        $this->urls = $urls;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUrls()
+    {
+        return $this->urls;
     }
 
     public function setOutput(OutputInterface $output)
@@ -443,7 +477,7 @@ abstract class BaseDeployer implements DeployerInterface
     {
         list($host, $port) = $this->extractHostPort($server);
         if ($host == 'localhost') $this->exec('cp -a "' . $originPath . '" "' . $serverPath . '"');
-        else $this->exec('rsync -ar --delete -e "ssh -p ' . $port . ' -i \"' . $this->sshConfig['private_key_file'] . '\" -l ' . $this->sshConfig['user'] . ' -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\"" ' . $rsyncParams . ' "' . $originPath . '" "' . $host . ':' . $serverPath . '"');
+        else $this->exec('rsync -ar --delete -e "ssh -p ' . $port . ' -i \"' . $this->sshConfig['private_key_file'] . '\" -l ' . $this->sshConfig['user'] . ' -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\"" --exclude ".git" ' . $rsyncParams . ' "' . $originPath . '" "' . $host . ':' . $serverPath . '"');
     }
 
     /**
@@ -694,7 +728,7 @@ abstract class BaseDeployer implements DeployerInterface
         foreach($r as $server => $item) {
             $this->logger->debug('exec exit_code: ' . $item['exit_code']);
             if(!empty($item['output'])) $this->logger->debug('exec output: ' . $item['output']);
-            if(!empty($item['error']) && $item['error'] != 'tcgetattr: Invalid argument' . "\n") $this->logger->debug('exec error: ' . $item['error']);
+            if(!empty($item['error'])) $this->logger->debug('exec error: ' . $item['error']);
         }
 
         return $r;
@@ -952,4 +986,19 @@ abstract class BaseDeployer implements DeployerInterface
         return $arrListDir;
     }
 
+    /**
+     * @param $branch
+     */
+    public function updateBranch($branch)
+    {
+        $this->checkoutBranch = $branch;
+        $this->createVcs();
+    }
+
+    protected function createVcs()
+    {
+        $vcsFactory = new VcsFactory($this->checkoutUrl, $this->checkoutBranch, $this->checkoutProxy, $this->dryMode);
+        $this->setVcs($vcsFactory->create($this->vcsType));
+        if ($this->getLogger()) $this->getVcs()->setLogger($this->getLogger());
+    }
 }

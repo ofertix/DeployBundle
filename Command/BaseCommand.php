@@ -11,6 +11,8 @@
 
 namespace JordiLlonch\Bundle\DeployBundle\Command;
 
+use Akamon\Bundle\DeployBundle\Service\Engine;
+use JordiLlonch\Bundle\DeployBundle\Service\BaseDeployer;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,6 +22,7 @@ use Monolog\Handler\StreamHandler;
 
 abstract class BaseCommand extends ContainerAwareCommand
 {
+    /** @var Engine */
     protected $deployer;
 
     protected function configure()
@@ -31,22 +34,25 @@ abstract class BaseCommand extends ContainerAwareCommand
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        // Init deployer engine
         $this->deployer = $this->getContainer()->get('jordillonch_deployer.engine');
+        $this->deployer->setSelectedZones(explode(",", $input->getOption('zones')));
         $this->deployer->setOutput($output);
+        $this->setLogger($input);
+        // TODO: dry mode
+        //$this->deployer->setDryMode(...);
+        $this->deployer->adquireZonesLockOrThrowException();
+    }
 
+    /**
+     * @param InputInterface $input
+     */
+    protected function setLogger(InputInterface $input)
+    {
         // Logger
         $logger = $this->getContainer()->get('logger');
-        if($input->getOption('verbose')) {
+        if ($input->getOption('verbose')) {
             $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
         }
         $this->deployer->setLogger($logger);
-
-        // TODO: dry mode
-        //$this->deployer->setDryMode(...);
-
-        // Selected zones
-        $optionZones = $input->getOption('zones');
-        $this->deployer->setSelectedZones(explode(",", $optionZones));
     }
 }
