@@ -483,7 +483,23 @@ abstract class BaseDeployer implements DeployerInterface
     {
         list($host, $port) = $this->extractHostPort($server);
         if ($host == 'localhost') $this->exec('cp -a "' . $originPath . '" "' . $serverPath . '"');
-        else $this->exec('rsync -ar --delete -e "ssh -p ' . $port . ' -i \"' . $this->sshConfig['private_key_file'] . '\" -l ' . $this->sshConfig['user'] . ' -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\"" --exclude ".git" ' . $rsyncParams . ' "' . $originPath . '" "' . $host . ':' . $serverPath . '"');
+        else {
+            $this->exec($this->getRsyncCommand($host, $port, $rsyncParams, $originPath, $serverPath));
+        }
+    }
+
+    private function getRsyncCommand($host, $port, $rsyncParams, $originPath, $serverPath)
+    {
+        $sshConfig = '';
+        if (array_key_exists('private_key_file', $this->sshConfig)) {
+            $sshConfig .= '" -i \"' . $this->sshConfig['private_key_file'] . '\"';
+        }
+
+        if (array_key_exists('user', $this->sshConfig)) {
+            $sshConfig .= ' -l ' . $this->sshConfig['user'];
+        }
+
+        return 'rsync -ar --delete -e "ssh -p ' . $port . $sshConfig . ' -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\"" --exclude ".git" ' . $rsyncParams . ' "' . $originPath . '" "' . $host . ':' . $serverPath . '"';
     }
 
     /**
